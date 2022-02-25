@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    group:
+      default: local
+  config:
+    import:
+      - application-spring-context.yaml
+      - application-db.yaml
+      - application-site-backend.yaml

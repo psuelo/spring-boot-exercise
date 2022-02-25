@@ -1,0 +1,3 @@
+# OpenShift will kill a POD if it did not complete its shutdown within `terminationGracePeriodSeconds`. Our PODs are using the default of 30s
+# see also https://docs.openshift.com/container-platform/3.11/dev_guide/deployments/advanced_deployment_strategies.html#graceful-termination
+spring.lifecycle.timeout-per-shutdown-phase: 25s

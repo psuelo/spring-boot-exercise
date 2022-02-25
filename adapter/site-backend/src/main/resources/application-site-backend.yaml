@@ -1,0 +1,16 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /exercise-app
+  forward-headers-strategy: native
+  shutdown: graceful # with timeout defined in spring.lifecycle.timeout-per-shutdown-phase
+
+management:
+  server:
+    port: 8081
+
+springdoc:
+  swagger-ui:
+    enabled: true
+  api-docs:
+    enabled: true

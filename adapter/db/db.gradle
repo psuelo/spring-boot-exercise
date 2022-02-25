@@ -1,0 +1,22 @@
+apply from: '../../etc/jacoco.gradle'
+
+dependencies {
+    implementation project(':domain')
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'org.springframework.retry:spring-retry'
+
+    implementation 'org.liquibase:liquibase-core'
+    implementation 'com.h2database:h2'
+    implementation 'org.projectlombok:lombok'
+    implementation 'org.apache.commons:commons-lang3'
+
+    testImplementation project(':domain').sourceSets.test.output
+}
+
+configureTestDependencies(project)

@@ -1,0 +1,117 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.9' apply false
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE' apply false
+}
+
+subprojects {
+	repositories {
+        mavenCentral()
+	}
+	
+    configureDependencyManagement(project)
+
+    bootJar.enabled = false
+
+    task sourceJar(type: Jar) {
+        from sourceSets.main.allJava
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            exceptionFormat = 'full'
+        }
+    }
+
+    // build fails on most compiler warnings, we ignore
+    // ...deprecation warnings as using deprecated apis might be necessary on migration path
+    // ...missing override annotations as they are not mandatory for us
+    // ...serialization warnings as we do not use the java serialization
+    // ...unprocessed annotations as there are many false positives
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << '-Xlint' << '-Xlint:-deprecation' << '-Xlint:-overrides' << '-Xlint:-serial' << '-Xlint:-processing' << '-Werror'
+    }
+
+    // make local build fail late (executes as many tasks as possible before failing)
+    gradle.startParameter.continueOnFailure = true
+    
+}
+
+def configureDependencyManagement(subproject) {
+    configure(subproject) {
+		apply plugin: 'java-library'
+    	apply plugin: 'org.springframework.boot'
+        apply plugin: 'io.spring.dependency-management'
+		
+		sourceCompatibility = JavaVersion.VERSION_11
+		compileJava.options.encoding = 'UTF-8'
+		compileTestJava.options.encoding = 'UTF-8'
+	
+        dependencyManagement {
+            dependencies {
+                dependency 'kn.knlogin.visco:visco-test-support:1.66.0'
+            }
+        }
+    }
+}
+
+ext.configureBootProject = { subproject, archivesName ->
+    configure(subproject) {
+
+        apply plugin: 'org.springframework.boot'
+
+        group = 'kn.exercise.app'
+        archivesBaseName = archivesName
+
+        configurations {
+            publishedJar {
+                transitive = false // prevent downloading transitive dependencies
+            }
+        }
+
+        configureDependencyManagement(subproject)
+        // apply dependency management configuration after applying the Spring Boot Plugin.
+        // Last BOM import + bomProperty definition wins (Spring Boot plugin automatically imports Spring Boot BOM as well.)
+
+        dependencies {
+            publishedJar "${group}:${archivesName}:${version}"
+        }
+    }
+}
+
+ext.configureBootTasks = { subproject ->
+    configure(subproject) {
+
+        springBoot {
+            buildInfo()
+        }
+
+        dependencies {
+            developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        }
+    }
+}
+
+ext.configureTestDependencies = { subproject ->
+    configure(subproject) {
+        dependencies {
+            testAnnotationProcessor 'org.projectlombok:lombok'
+            testImplementation('org.springframework.boot:spring-boot-starter-test') {
+                exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+            }
+
+            testImplementation 'org.assertj:assertj-core'
+            testImplementation 'org.junit.jupiter:junit-jupiter'
+            testImplementation 'org.junit.jupiter:junit-jupiter-api'
+            testImplementation 'org.junit.jupiter:junit-jupiter-params'
+
+            testImplementation 'org.mockito:mockito-core'
+            testImplementation 'org.mockito:mockito-junit-jupiter'
+        }
+    }
+}
+
+wrapper {
+    gradleVersion = '7.3.3'
+    distributionType = Wrapper.DistributionType.ALL
+}

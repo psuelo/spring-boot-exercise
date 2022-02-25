@@ -1,0 +1,35 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.8.6'
+}
+
+test.finalizedBy jacocoTestCoverageVerification, jacocoTestReport
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                counter = 'BRANCH'
+                minimum = 1.00
+            }
+            limit {
+                minimum = 1.00
+            }
+        }
+    }
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    excludes: ["**/test/**"]
+            )
+        }))
+    }
+}
+
+jacocoTestReport {
+    reports {
+        html.required
+    }
+}
+

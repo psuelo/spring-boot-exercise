@@ -1,0 +1,7 @@
+spring:
+  config:
+    import:
+      - application-db-local-h2.yaml
+
+info:
+  environment: LOCAL
