@@ -1,0 +1,9 @@
+apply from: '../etc/jacoco.gradle'
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok'
+    implementation project(':application:spring-context')
+    implementation 'org.projectlombok:lombok'
+}
+
+configureTestDependencies(project)

@@ -1,0 +1,8 @@
+spring:
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    contexts: db
+  jpa:
+    # Open Session in View (OSIV) is enabled by default but widely considered an anti-pattern from a performance and scalability perspective.
+    # For further details see: https://github.com/spring-projects/spring-boot/issues/7107
+    open-in-view: false

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd"
+                   logicalFilePath="db.changelog-v2022-02.xml">
+
+    <changeSet id="KNGOT-0001_AddBookingFeature" author="Ralf Grube">
+        <createTable tableName="BOOKING">
+            <column name="BOOKING_ID" type="BIGINT" remarks="Identifier for the booking">
+                <constraints nullable="false"/>
+            </column>
+            <column name="BOOKED_QUANTITY" type="NUMBER(10)" remarks="The booked quantity">
+            </column>
+            <column name="ORIGIN" type="VARCHAR2(70)" remarks="Origin">
+            </column>
+            <column name="DESTINATION" type="VARCHAR2(70)" remarks="Destination">
+            </column>
+            <column name="DESCRIPTION" type="VARCHAR2(255)" remarks="optional free text">
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="BOOKING_ID"
+                       constraintName="PK_BOOKING"
+                       tableName="BOOKING" />
+    </changeSet>
+</databaseChangeLog>

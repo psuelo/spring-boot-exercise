@@ -1,0 +1,21 @@
+rootProject.name = 'exercise-app'
+
+addSubproject('domain')
+addSubproject('application:site')
+addSubproject('application:spring-context')
+addSubproject('adapter:site-backend')
+addSubproject('adapter:db')
+
+
+void addSubproject(String name) {
+	include name
+	project(":" + name).buildFileName = buildFileName(name) + ".gradle"
+}
+
+String buildFileName(String name) {
+	if (name.contains(':')) {
+		return name.substring(name.lastIndexOf(':') + 1, name.length())
+	}
+
+	return name
+}

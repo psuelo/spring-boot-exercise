@@ -1,0 +1,6 @@
+info:
+  application:
+    name: Excercise App Site
+spring:
+  application:
+    name: ${info.application.name}

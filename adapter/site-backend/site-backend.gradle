@@ -1,0 +1,23 @@
+apply from: '../../etc/jacoco.gradle'
+
+dependencies {
+    implementation project(':domain')
+    implementation project(':application:spring-context')
+
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation 'org.projectlombok:lombok'
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.data:spring-data-commons'
+
+    implementation 'org.springdoc:springdoc-openapi-ui:1.5.10'
+    implementation 'org.springdoc:springdoc-openapi-data-rest:1.5.10'
+
+    testImplementation project(':domain').sourceSets.test.output
+}
+
+configureTestDependencies(project)

@@ -1,0 +1,33 @@
+apply from: '../../etc/jacoco.gradle'
+
+configureBootProject(project, 'exercise-app-site')
+
+dependencies {
+    implementation project(':application:spring-context')
+    implementation project(':domain')
+    implementation project(':adapter:site-backend')
+    implementation project(':adapter:db')
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation 'org.projectlombok:lombok'
+
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+}
+
+configureBootTasks(project)
+
+bootRun {
+    // configure resource hot reload
+    //      https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#running-your-application-reloading-resources
+    //      use source folder for resources instead of build output folder
+    sourceResources project(':adapter:site-backend').sourceSets.main
+//    sourceResources project(':adapter:site-frontend').sourceSets.generated
+    sourceResources project(':domain').sourceSets.main
+    sourceResources sourceSets.main
+}
+
+task siteRun(type: JavaExec, dependsOn: bootRun)
